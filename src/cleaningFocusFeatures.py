@@ -17,6 +17,11 @@ print("Number of rows loaded:", len(data_list))
 # Create a dictionary: key = column name, value = column data
 accident_dict = {header: data[:, i] for i, header in enumerate(headers)}
 
+selected_headers= ['Time', 'Day_of_week', 'Age_band_of_driver', 'Vehicle_driver_relation', 'Driving_experience',
+                    'Type_of_vehicle', 'Owner_of_vehicle', 'Area_accident_occured', 'Lanes_or_Medians',
+                    'Road_allignment', 'Types_of_Junction', 'Road_surface_type', 'Road_surface_conditions',
+                    'Light_conditions', 'Weather_conditions' 'Cause_of_accident']
+
 # Now can check the focus features - example area
 col_name = "Area_accident_occured" 
 col_data = accident_dict[col_name] 
