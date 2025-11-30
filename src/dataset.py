@@ -1,6 +1,7 @@
 import numpy as np
 
 path = "/Users/marcelwillkommen/Coding/DataForAI/DataAnalysisProject/DataAnalysisProject/data/raw/RTA Dataset.csv"
+path_new = "/Users/marcelwillkommen/Coding/DataForAI/DataAnalysisProject/DataAnalysisProject/data/processed/dataset-20251130.csv"
 expected_cols = 32
 
 #Load the data from the .csv
@@ -23,3 +24,9 @@ except ValueError as e:
     print("Total rows:", len(rows))
     print("Good rows:", len(clean_rows))
     print("Skipped rows:", len(rows) - len(clean_rows))
+
+    dataList = np.array(clean_rows, dtype=str)
+
+# Create new csv
+np.savetxt(path_new, dataList, delimiter=",", fmt="%s")
+
