@@ -83,7 +83,7 @@ except ModuleNotFoundError:
 # =======================
 CSV_PATH = "/Users/marcelwillkommen/Coding/DataForAI/DataAnalysisProject/DataAnalysisProject/data/processed/dataset-20251215_2.csv"
 TARGET_ORIG = "Accident_severity"
-SEVERE_LABELS = ["fatal", "serious"]  # confirmed in your dataset
+SEVERE_LABELS = ["fatal", "serious"] 
 NONSEVERE_LABEL = "slight"
 
 BASE_FEATURES = [
@@ -108,7 +108,7 @@ BASE_FEATURES = [
 OUT_DIR = Path("model_outputs_binary_risk")
 OUT_DIR.mkdir(exist_ok=True)
 
-PRECISION_FLOOR = 0.20  # policy choice for threshold optimization
+PRECISION_FLOOR = 0.20
 
 # =======================
 # Helpers
@@ -176,7 +176,7 @@ if missing:
 df["Severe_accident"] = df[TARGET_ORIG].isin(SEVERE_LABELS).astype(int)
 
 # =======================
-# Feature engineering (AS GIVEN)
+# Feature engineering
 # Base binary risk features
 # -----------------------------
 df["risk_night"] = df["Light_conditions"].isin(
@@ -236,8 +236,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # =======================
 # Preprocessing
-# - Base features are categorical -> one-hot
-# - Risk features are numeric binary -> pass through (impute if needed)
+# - Base features are categorical
+# - Risk features are numeric binary
 # =======================
 cat_pipe = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
@@ -263,7 +263,7 @@ baseline_model = RandomForestClassifier(
     n_estimators=400,
     random_state=42,
     n_jobs=-1,
-    class_weight={0: 1, 1: 4},   # same idea as before
+    class_weight={0: 1, 1: 4},
     min_samples_leaf=2,
 )
 
@@ -321,7 +321,7 @@ for t in thresholds:
 thr_df = pd.DataFrame(rows)
 thr_df.to_csv(OUT_DIR / "severe_threshold_tradeoff.csv", index=False)
 
-# Choose best threshold: maximize recall subject to precision floor
+# Maximize recall subject to precision floor
 cand = thr_df[thr_df["precision"] >= PRECISION_FLOOR].sort_values("recall", ascending=False).head(1)
 if len(cand) == 0:
     best_t = float(thr_df.sort_values("f1", ascending=False).iloc[0]["threshold"])
@@ -360,7 +360,7 @@ with open(OUT_DIR / "severe_metrics_summary.tex", "w", encoding="utf-8") as f:
     f.write(metrics_df.to_latex(index=False, float_format="%.3f"))
 
 # =======================
-# Plots (each plot -> separate PDF)
+# Plots
 # =======================
 
 # Plot 1: binary class distribution (test set)
@@ -460,7 +460,7 @@ imp_base = aggregate_importance(baseline_pipe, BASE_FEATURES)  # aggregated only
 imp_sm = aggregate_importance(smote_pipe, BASE_FEATURES)
 
 # Add risk features to importance plot using RF direct importances:
-# We'll show two panels:
+# 2 panels:
 # - Aggregated base feature importance
 # - Risk feature importances from RF (direct columns, no one-hot)
 

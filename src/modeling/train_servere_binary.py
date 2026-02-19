@@ -75,7 +75,7 @@ except ModuleNotFoundError:
 # =======================
 CSV_PATH = "/Users/marcelwillkommen/Coding/DataForAI/DataAnalysisProject/DataAnalysisProject/data/processed/dataset-20251215_2.csv"
 TARGET_ORIG = "Accident_severity"
-SEVERE_LABELS = ["fatal", "serious"]  # your dataset uses these exact strings
+SEVERE_LABELS = ["fatal", "serious"]
 NONSEVERE_LABEL = "slight"
 
 FEATURES = [
@@ -147,7 +147,7 @@ if missing:
 df["Severe_accident"] = df[TARGET_ORIG].isin(SEVERE_LABELS).astype(int)
 
 X = df[FEATURES].copy()
-y = df["Severe_accident"].copy()  # 1 severe, 0 non-severe
+y = df["Severe_accident"].copy()
 
 # =======================
 # Split
@@ -177,11 +177,11 @@ baseline_model = RandomForestClassifier(
     n_estimators=400,
     random_state=42,
     n_jobs=-1,
-    class_weight={0: 1, 1: 4},  # tune this if needed
+    class_weight={0: 1, 1: 4},
     min_samples_leaf=2,
 )
 
-# SMOTE model: no class_weight (usually)
+# SMOTE model: no class_weight
 smote_model = RandomForestClassifier(
     n_estimators=400,
     random_state=42,
@@ -252,7 +252,7 @@ print(classification_report(y_test, y_pred_sm, zero_division=0, target_names=["n
 print("\nSaved metrics to:", OUT_DIR)
 
 # =======================
-# Plot: Severe class distribution (whole dataset)
+# Plot: Severe class distribution 
 # =======================
 plt.figure(figsize=(6, 4))
 dist = df["Severe_accident"].value_counts(normalize=True) * 100
@@ -263,7 +263,7 @@ plt.title("Binary Class Distribution")
 save_pdf(OUT_DIR / "severe_class_distribution.pdf")
 
 # =======================
-# Plot: Confusion matrices (separate + compare)
+# Plot: Confusion matrices 
 # =======================
 cm_base = confusion_matrix(y_test, y_pred_base, labels=[0, 1])
 cm_sm = confusion_matrix(y_test, y_pred_sm, labels=[0, 1])
@@ -279,7 +279,7 @@ ConfusionMatrixDisplay(cm_sm, display_labels=labels).plot(values_format="d")
 plt.title("Confusion Matrix — SMOTE")
 save_pdf(OUT_DIR / "severe_confusion_smote.pdf")
 
-# Side-by-side compare (one PDF, two panels)
+# Side-by-side compare 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 fig.suptitle("Confusion Matrix Comparison (Counts)")
 for ax, cm, title in [(axes[0], cm_base, "Baseline"), (axes[1], cm_sm, "SMOTE")]:
@@ -355,7 +355,7 @@ plt.legend()
 save_pdf(OUT_DIR / "severe_threshold_optimization.pdf")
 
 # Choose threshold by policy: maximize recall with a precision floor
-PRECISION_FLOOR = 0.20  # adjust to your report goal
+PRECISION_FLOOR = 0.20  
 cand = thr_df[thr_df["precision"] >= PRECISION_FLOOR].sort_values("recall", ascending=False).head(1)
 if len(cand) == 0:
     best_t = float(thr_df.sort_values("f1", ascending=False).iloc[0]["threshold"])
