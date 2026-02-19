@@ -1,4 +1,0 @@
-ipykernel
-python-dotenv
-numpy 
-matplotlib.pyplot
