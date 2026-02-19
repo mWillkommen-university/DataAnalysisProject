@@ -1,0 +1,9 @@
+\begin{tabular}{lrrrrrrrr}
+\toprule
+model & precision_severe & recall_severe & f1_severe & pr_auc & roc_auc & accuracy & support_severe & support_total \\
+\midrule
+Baseline (class_weight) & 0.583 & 0.019 & 0.036 & 0.258 & 0.626 & 0.846 & 376 & 2425 \\
+SMOTE (default threshold) & 0.000 & 0.000 & 0.000 & 0.209 & 0.591 & 0.845 & 376 & 2425 \\
+SMOTE + threshold override & 0.201 & 0.537 & 0.293 & 0.209 & 0.591 & 0.598 & 376 & 2425 \\
+\bottomrule
+\end{tabular}
